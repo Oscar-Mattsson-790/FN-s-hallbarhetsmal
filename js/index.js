@@ -10,22 +10,17 @@ listOfGoals = document.querySelector(".goal-list");
 
 //gör funktionen asynkron pga hanterar mycket data.
 async function getUnGoals() {
-  // https://unstats.un.org/SDGAPI/swagger/#!/Goal/V1SdgGoalListGet
-  // const url = BASE_URL + method;
   const url = BASE_URL + "v1/sdg/Goal/List";
-  // console.log('API: ' , url);
+
   //hämta ner data via fetch. Await gör att den asynkrona funktionen jobba i fetch
   const response = await fetch(url);
-  // console.log(response);
+
   //Gör om data till ett objekt via json
   const data = await response.json();
 
-  console.log("data: ", data);
-
   for (const goal of data) {
-    //console.log(goal.code);
     let subGoals = await getUnSubgoals(goal.code);
-    // console.log(subGoals);
+
     let li = document.createElement("li");
     let details = document.createElement("details");
     let summary = document.createElement("summary");
@@ -34,21 +29,12 @@ async function getUnGoals() {
     li.appendChild(details);
     details.appendChild(summary);
     summary.innerText = goal.title;
-    // listOfGoals.innerHTML += `<li><details>
-    // <summary >${goal.title}</summary>`
-    // console.log(subGoals[0]);
-    subGoals[0].forEach((e, i) => {
-      console.log(i);
+
+    subGoals[0].forEach((e) => {
       let p = document.createElement("p");
       p.innerText = e.description;
       details.appendChild(p);
-      // console.log(listOfGoals.childNodes[i].childNodes[0]);
-      // listOfGoals.childNodes[1].childNodes[0].innerHTML += `${e.description}`
-      // console.log(e.description);
     });
-
-    // listOfGoals.innerHTML += `</details></li>`
-    // ${getUnSubgoals(goal.code)}
   }
 }
 getUnGoals();
@@ -63,6 +49,6 @@ async function getUnSubgoals(code) {
   for (const target of data) {
     targetsArr.push(target.targets);
   }
-  // console.log('data :', data);
+
   return targetsArr;
 }
